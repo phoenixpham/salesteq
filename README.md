@@ -61,7 +61,7 @@ After running the script on `Algorithms_and_Flowcharts.pdf`, the following metad
          ["MOD", "Modulus division (gives the remainder)"],
          ["DIV", "Integer division (gives the whole number)"]
        ],
-       "description": "Mathematical operators used in pseudocode",
+       "description": "Table 1 on page 5",
        "page": 5
      }
      ```
@@ -69,10 +69,30 @@ After running the script on `Algorithms_and_Flowcharts.pdf`, the following metad
    - Example Text Extracted:
      ```json
      {
-       "description": "Flowchart showing the steps to compare two numbers.",
+       "description": "Image 2 on page 7",
        "page": 7,
+       "image_index": 2
      }
      ```
+
+## Query Examples
+The following queries were tested after storing metadata in Qdrant:
+1. `"What are flowcharts?"`
+   - Response:
+   ```css
+   A flowchart shows diagrammatically the steps required to complete a task.
+   ```
+2. `"What are the types of loops described?"`
+   - Response:
+   ```css
+   Types of loops: Count-controlled loop, Condition-controlled loop.
+   ```
+3. `"Describe the operators in the document."`
+   - Response:
+   ```css
+   Addition (+), Subtraction (-), Multiplication (*), Division (/), Power of (^), Modulus division (MOD), Integer division (DIV).
+   ```
+
 ## Challenges and Limitations
 - Table extraction is basic and may require more sophisticated libraries for complex table layouts
 - Image description relies on OCR, which can be imperfect, especially for non-textual images like diagrams
