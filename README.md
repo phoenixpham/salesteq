@@ -36,7 +36,7 @@ pip install pymupdf pytesseract pillow qdrant-client sentence-transformers numpy
 - Supports semantic search across extracted content using vector embeddings
 
 ## Results
-# Extracted Metadata
+### Extracted Metadata
 After running the script on `Algorithms_and_Flowcharts.pdf`, the following metadata was stored in Qdrant:
 1. **Text Metadata**
    - Example Text Extracted:
