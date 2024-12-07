@@ -35,6 +35,19 @@ pip install pymupdf pytesseract pillow qdrant-client sentence-transformers numpy
 - Stores all metadata in Qdrant vector store for efficient querying
 - Supports semantic search across extracted content using vector embeddings
 
+## Results
+# Extracted Metadata
+After runnign the script on `Algorithms_and_Flowcharts.pdf`, the following metadata was stored in Qdrant:
+1. **Text Metadata**
+   - Example Text Extracted:
+     ```
+     {
+    "text": "A flowchart shows diagrammatically the steps required to complete a task.",
+    "page": 3,
+    "paragraph": 2
+}
+```
+
 ## Challenges and Limitations
 - Table extraction is basic and may require more sophisticated libraries for complex table layouts
 - Image description relies on OCR, which can be imperfect, especially for non-textual images like diagrams
