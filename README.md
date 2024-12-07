@@ -36,14 +36,15 @@ pip install pymupdf pytesseract pillow qdrant-client sentence-transformers numpy
 - Supports semantic search across extracted content using vector embeddings
 
 ## Challenges and Limitations
-- Table extraction is basic and may require more sophisticated libraries
-- Image description relies on OCR, which can be imperfect
+- Table extraction is basic and may require more sophisticated libraries for complex table layouts
+- Image description relies on OCR, which can be imperfect, especially for non-textual images like diagrams
 - Requires Tesseract OCR for image processing
 
 ## Potential Improvements
-- Implement more advanced table detection
-- Enhance image description accuracy
+- Implement more advanced table detection and extraction using specialized libraries
+- Use a more sophisticated model for image descriptions
 - Add support for more complex PDF structures
+- Add a simple web interface for uploading PDFs and querying metadata
 
 ## Submission Details
 - Submitted by: Phoenix Pham
