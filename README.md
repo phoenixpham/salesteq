@@ -108,3 +108,6 @@ The following queries were tested after storing metadata in Qdrant:
 - Submitted by: Phoenix Pham
 - Submission Date: 12/7/2024
 - Contact: phoenixpham@berkeley.edu
+
+## License
+This project is licensed under the MIT License.
