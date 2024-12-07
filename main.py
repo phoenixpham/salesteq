@@ -6,7 +6,7 @@ from typing import List, Dict, Any
 import fitz  # PyMuPDF for PDF processing
 import pytesseract  # OCR
 from PIL import Image
-import pandas as pd
+from io import BytesIO
 from qdrant_client import QdrantClient
 from qdrant_client.models import VectorParams, Distance, PointStruct
 import numpy as np
@@ -24,8 +24,11 @@ class PDFMetadataExtractor:
         self.pdf_path = pdf_path
         self.doc = fitz.open(pdf_path)
         
-        # Initialize Qdrant client
-        self.qdrant_client = QdrantClient(host=qdrant_host, port=qdrant_port)
+        try:
+            # Initialize Qdrant client
+            self.qdrant_client = QdrantClient(host=qdrant_host, port=qdrant_port)
+        except Exception as e:
+            raise ConnectionError(f"Failed to connect to Qdrant at {qdrant_host}:{qdrant_port}. Error: {e}")
         
         # Collection name
         self.collection_name = "pdf_metadata_collection"
@@ -45,9 +48,9 @@ class PDFMetadataExtractor:
                 collection_name=self.collection_name,
                 vectors_config=VectorParams(size=384, distance=Distance.COSINE)
             )
-        except:
-            # Collection might already exist
-            pass
+            print(f"Collection '{self.collection_name}' created.")
+        except Exception as e:
+            print(f"Could not create collection '{self.collection_name}': {e}")
     
     def extract_text_with_metadata(self) -> List[Dict[str, Any]]:
         """
@@ -110,10 +113,10 @@ class PDFMetadataExtractor:
                 
                 # Use pytesseract to get image description
                 pil_image = Image.open(BytesIO(image_bytes))
-                description = pytesseract.image_to_string(pil_image)
+                description = pytesseract.image_to_string(pil_image).strip()
                 
                 images.append({
-                    'description': description.strip() or f'Image {img_index} on page {page_num}',
+                    'description': description or f'Image {img_index} on page {page_num}',
                     'page': page_num,
                     'image_index': img_index
                 })
@@ -128,27 +131,13 @@ class PDFMetadataExtractor:
         """
         points = []
         for idx, item in enumerate(data):
-            # Generate embedding
-            if 'text' in item:
-                embedding = self.embedding_model.encode(item['text']).tolist()
-            elif 'description' in item:
-                embedding = self.embedding_model.encode(item['description']).tolist()
-            else:
-                continue
-            
-            points.append(
-                PointStruct(
-                    id=idx,
-                    vector=embedding,
-                    payload=item
-                )
-            )
+            try:
+                embedding = self.embedding_model.encode(item.get('text') or item.get('description')).tolist()
+                points.append(PointStruct(id=idx, vector=embedding, payload=item))
+            except Exception as e:
+                print(f"Error embedding item {item}: {e}")
         
-        # Upsert points into Qdrant
-        self.qdrant_client.upsert(
-            collection_name=self.collection_name,
-            points=points
-        )
+        self.qdrant_client.upsert(collection_name=self.collection_name, points=points)
     
     def query_qdrant(self, query: str, top_k: int = 5):
         """
@@ -170,22 +159,19 @@ class PDFMetadataExtractor:
         
         return [result.payload for result in search_result]
     
+
     def process_pdf(self):
         """
-        Main method to process PDF and store metadata
+        Process PDF and store metadata.
         """
-        # Extract and store text metadata
         text_metadata = self.extract_text_with_metadata()
         self.store_in_qdrant(text_metadata)
-        
-        # Extract and store table metadata
+
         table_metadata = self.extract_tables()
         self.store_in_qdrant(table_metadata)
-        
-        # Extract and store image metadata
+
         image_metadata = self.extract_images()
         self.store_in_qdrant(image_metadata)
-        
         print("PDF metadata extraction and storage completed.")
 
 def main():
