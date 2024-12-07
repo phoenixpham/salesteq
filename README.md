@@ -40,13 +40,13 @@ pip install pymupdf pytesseract pillow qdrant-client sentence-transformers numpy
 After runnign the script on `Algorithms_and_Flowcharts.pdf`, the following metadata was stored in Qdrant:
 1. **Text Metadata**
    - Example Text Extracted:
-     ```
+     ```json
      {
-    "text": "A flowchart shows diagrammatically the steps required to complete a task.",
-    "page": 3,
-    "paragraph": 2
-}
-```
+       "text": "A flowchart shows diagrammatically the steps required to complete a task.",
+       "page": 2,
+       "paragraph": 2
+     }
+     ```
 
 ## Challenges and Limitations
 - Table extraction is basic and may require more sophisticated libraries for complex table layouts
