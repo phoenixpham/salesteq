@@ -37,17 +37,42 @@ pip install pymupdf pytesseract pillow qdrant-client sentence-transformers numpy
 
 ## Results
 # Extracted Metadata
-After runnign the script on `Algorithms_and_Flowcharts.pdf`, the following metadata was stored in Qdrant:
+After running the script on `Algorithms_and_Flowcharts.pdf`, the following metadata was stored in Qdrant:
 1. **Text Metadata**
    - Example Text Extracted:
      ```json
      {
-       "text": "A flowchart shows diagrammatically the steps required to complete a task.",
+       "text": "A flowchart shows diagrammatically the steps required to complete a task and the order that they are to be performed.",
        "page": 2,
        "paragraph": 2
      }
      ```
-
+2. **Table Metadata**
+   - Example Text Extracted:
+     ```json
+     {
+       "table": [
+         ["Operator", "Description"],
+         ["+", "Addition"],
+         ["-", "Subtraction"],
+         ["*", "Multiplication"],
+         ["/", "Division"]
+         ["^", "Power of"],
+         ["MOD", "Modulus division (gives the remainder)"],
+         ["DIV", "Integer division (gives the whole number)"]
+       ],
+       "description": "Mathematical operators used in pseudocode",
+       "page": 5
+     }
+     ```
+3. **Image Metadata**
+   - Example Text Extracted:
+     ```json
+     {
+       "description": "Flowchart showing the steps to compare two numbers.",
+       "page": 7,
+     }
+     ```
 ## Challenges and Limitations
 - Table extraction is basic and may require more sophisticated libraries for complex table layouts
 - Image description relies on OCR, which can be imperfect, especially for non-textual images like diagrams
